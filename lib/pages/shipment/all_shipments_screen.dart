@@ -1,4 +1,5 @@
 import 'package:bosta_clone_app/model/shipment/shipment_model.dart';
+import 'package:bosta_clone_app/pages/auth/verify_phone_number.dart';
 import 'package:bosta_clone_app/pages/drawer.dart';
 import 'package:bosta_clone_app/pages/notification/notifications_screen.dart';
 import 'package:bosta_clone_app/pages/samilier_widget/screen_handle_widget.dart';
@@ -70,7 +71,7 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
                 color: CustomColors.thirdPrimary,
               ),
               onPressed: () {
-                Navigator.push(
+                Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (context) => NotificationScreen()));
@@ -130,7 +131,7 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
             );
           } else if (allShipmentProvider.responseCodeOfShipments == 401) {
             return drawBlockedShipment(
-              onTapToDo: () async {
+              onTapToDoReload: () async {
                 await Future.delayed(
                   Duration(milliseconds: 1000),
                 );
@@ -141,6 +142,11 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
                     errorMassage: allShipmentProvider.error,
                   );
                 }
+              }, onTapToDoVerify: () async {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => VerifyPhoneNumberPage()));
               },
             );
           } else if (allShipmentProvider.responseCodeOfShipments == 404) {

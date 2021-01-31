@@ -11,7 +11,7 @@ import 'file:///C:/Users/mahmoud.ragab/projects/flutter_apps/bosta_clone_app/lib
 class PickUpLocationProvider extends ChangeNotifier {
   AllStates _pickupsLocationState = AllStates.Init;
   // AllStates _createPickupState = AllStates.Init;
-  String _errorMassage, _massage;
+  String _errorMassage, _message;
   int statusCodeGet, statusCodeCreate;
   List<PickupLocationModel> _pickupsLocation = [];
 
@@ -28,7 +28,7 @@ class PickUpLocationProvider extends ChangeNotifier {
 
   String get error => _errorMassage;
 
-  String get massage => _massage;
+  String get message => _message;
 
   AllStates get stateOfPickupLocation => _pickupsLocationState;
 

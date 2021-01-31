@@ -263,10 +263,12 @@ class _CreateShipmentState extends State<CreateShipment> {
                               ),
                             ),
                       backGroundColor: CustomColors.primary,
+                      height: 40.0,
                       width: MediaQuery.of(context).size.width * 0.85,
                       onPress: () async {
                         if (_createShipmentFormKey.currentState.validate()) {
-                          if (!await createShipmentProvider.createSingleShipment(
+                          if (!await createShipmentProvider
+                              .createSingleShipment(
                             receiverName: _receiverName.text,
                             receiverPhone: _receiverPhoneNumber.text,
                             receiverAddress: _receiveraddress.text,
@@ -302,7 +304,7 @@ class _CreateShipmentState extends State<CreateShipment> {
                                 .showSnackBar(SnackBar(
                               backgroundColor: CustomColors.primary,
                               content: Text(
-                                createShipmentProvider.massage,
+                                createShipmentProvider.message,
                                 style: TextStyle(
                                   color: CustomColors.white,
                                   fontWeight: FontWeight.bold,
@@ -326,6 +328,7 @@ class _CreateShipmentState extends State<CreateShipment> {
                         ),
                       ),
                       backGroundColor: CustomColors.grayBackground,
+                      height: 40.0,
                       width: MediaQuery.of(context).size.width * 0.85,
                       onPress: () {
                         _createShipmentScaffoldKey.currentState

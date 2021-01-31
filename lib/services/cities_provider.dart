@@ -112,7 +112,6 @@ class CitiesProvider extends ChangeNotifier {
           "Authorization": "Bearer " + await Preference.getToken()
         },
       );
-
       print(response.body);
       print(response.statusCode);
       var data = jsonDecode(response.body);

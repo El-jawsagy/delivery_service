@@ -83,7 +83,7 @@ class _SinglePickupScreenState extends State<SinglePickupScreen> {
         if (allPickupsProvider.responseCodeOfPickups == 200) {
           return _drawSinglePickup();
         } else if (allPickupsProvider.responseCodeOfPickups == 401) {
-          return drawBlockedShipment(onTapToDo: () async {
+          return drawBlockedShipment(onTapToDoReload: () async {
             await Future.delayed(
               Duration(milliseconds: 1000),
             );

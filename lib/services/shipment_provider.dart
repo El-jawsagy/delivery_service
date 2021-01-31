@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 class ShipmentsProvider extends ChangeNotifier {
   AllStates _shipmentState = AllStates.Init;
   AllStates _crateShipmentState = AllStates.Init;
-  String _errorMassage, _massage;
+  String _errorMessage, _message;
   int _statusCodeGetAll, _statusCodeCreate;
   List<ShipmentModel> _shipments = [];
   int _counter = 1;
@@ -21,9 +21,9 @@ class ShipmentsProvider extends ChangeNotifier {
 
   List<ShipmentModel> get allShipment => _shipments;
 
-  String get error => _errorMassage;
+  String get error => _errorMessage;
 
-  String get massage => _massage;
+  String get message => _message;
 
   AllStates get state => _shipmentState;
 
@@ -69,7 +69,7 @@ class ShipmentsProvider extends ChangeNotifier {
 
         return true;
       } else if (response.statusCode != 200) {
-        _errorMassage = data["message"];
+        _errorMessage = data["message"];
         _shipmentState = AllStates.Done;
         notifyListeners();
         return false;
@@ -132,35 +132,35 @@ class ShipmentsProvider extends ChangeNotifier {
       var data = jsonDecode(response.body);
       _statusCodeCreate = response.statusCode;
       if (response.statusCode == 201) {
-        _massage = data["message"];
+        _message = data["message"];
         _crateShipmentState = AllStates.Done;
         notifyListeners();
         return true;
       } else if (response.statusCode == 422) {
         if (data.containsKey("receiver_name")) {
-          _errorMassage = data["receiver_name"][0];
+          _errorMessage = data["receiver_name"][0];
         } else if (data.containsKey("receiver_address")) {
-          _errorMassage = data["receiver_address"][0];
+          _errorMessage = data["receiver_address"][0];
         } else if (data.containsKey("receiver_phone")) {
-          _errorMassage = data["receiver_phone"][0];
+          _errorMessage = data["receiver_phone"][0];
         } else if (data.containsKey("receiver_city_id")) {
-          _errorMassage = data["receiver_city_id  "][0];
+          _errorMessage = data["receiver_city_id  "][0];
         } else if (data.containsKey("receiver_area_id")) {
-          _errorMassage = data["receiver_area_id"][0];
+          _errorMessage = data["receiver_area_id"][0];
         } else if (data.containsKey("receiver_building_number")) {
-          _errorMassage = data["receiver_building_number"][0];
+          _errorMessage = data["receiver_building_number"][0];
         } else if (data.containsKey("receiver_floor")) {
-          _errorMassage = data["receiver_floor"][0];
+          _errorMessage = data["receiver_floor"][0];
         } else if (data.containsKey("receiver_apartment")) {
-          _errorMassage = data["receiver_apartment"][0];
+          _errorMessage = data["receiver_apartment"][0];
         } else if (data.containsKey("package_type_id")) {
-          _errorMassage = data["package_type_id"][0];
+          _errorMessage = data["package_type_id"][0];
         }
         _crateShipmentState = AllStates.Init;
         notifyListeners();
         return false;
       } else {
-        _errorMassage = data["message"];
+        _errorMessage = data["message"];
         _crateShipmentState = AllStates.Init;
         notifyListeners();
         return false;

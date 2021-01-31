@@ -14,22 +14,38 @@ Widget drawImageBackground(imagePath) {
 }
 
 Widget drawBlockedShipment({
-  Function onTapToDo,
+  Function onTapToDoReload,
+  Function onTapToDoVerify,
 }) {
-
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
       Center(child: Image.asset("assets/images/blocked.png")),
-      FloatingActionButton(
-          elevation: 2,
-          backgroundColor: CustomColors.primary,
-          hoverColor: CustomColors.primary,
-          child: FaIcon(
-            FontAwesomeIcons.retweet,
-            color: CustomColors.white,
-          ),
-          onPressed: onTapToDo)
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          FloatingActionButton(
+              heroTag: "shipmentReload",
+              elevation: 2,
+              backgroundColor: CustomColors.primary,
+              hoverColor: CustomColors.primary,
+              child: FaIcon(
+                FontAwesomeIcons.retweet,
+                color: CustomColors.white,
+              ),
+              onPressed: onTapToDoReload),
+          FloatingActionButton(
+              heroTag: "authVerify",
+              elevation: 2,
+              backgroundColor: CustomColors.primary,
+              hoverColor: CustomColors.primary,
+              child: FaIcon(
+                FontAwesomeIcons.envelopeSquare,
+                color: CustomColors.white,
+              ),
+              onPressed: onTapToDoVerify),
+        ],
+      )
     ],
   );
 }
@@ -59,5 +75,3 @@ Widget drawErrorSnackBar({scaffoldKey, errorMassage}) {
     ),
   ));
 }
-
-

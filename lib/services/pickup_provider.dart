@@ -12,7 +12,7 @@ class PickUpProvider extends ChangeNotifier {
   AllStates _pickupsState = AllStates.Init;
   AllStates _singlePickupState = AllStates.Init;
   AllStates _createPickupState = AllStates.Init;
-  String _errorMassage, _massage, _massageCreate;
+  String _errorMessage, _message, _messageCreate;
   int _statusCodeGetAll,
       _statusCodeGetSingle,
       _statusCodeCreate,
@@ -34,11 +34,11 @@ class PickUpProvider extends ChangeNotifier {
 
   int get pickupId => _singlePickupId;
 
-  String get error => _errorMassage;
+  String get error => _errorMessage;
 
-  String get massage => _massage;
+  String get message => _message;
 
-  String get massageCreate => _massageCreate;
+  String get messageCreate => _messageCreate;
 
   AllStates get stateOfPickups => _pickupsState;
 
@@ -53,7 +53,6 @@ class PickUpProvider extends ChangeNotifier {
   int get responseCodeOfCreatePickup => _statusCodeCreate;
 
   Future<bool> getAllPickups() async {
-
     try {
       String url = APIPaths.pickups +
           "?locale=${await Preference.getLanguage()}&page=$_counter";
@@ -88,7 +87,7 @@ class PickUpProvider extends ChangeNotifier {
         }
         return true;
       } else if (response.statusCode != 200) {
-        _errorMassage = data["message"];
+        _errorMessage = data["message"];
         _pickupsState = AllStates.Done;
         notifyListeners();
         return false;
@@ -133,12 +132,12 @@ class PickUpProvider extends ChangeNotifier {
         _singlePickup.shipment = ShipmentModel.fromJson(data["shipment"]);
         return true;
       } else if (response.statusCode > 500) {
-        _errorMassage = data["message"];
+        _errorMessage = data["message"];
         return false;
       } else if (response.statusCode == 422) {
-        _errorMassage = data["message"];
+        _errorMessage = data["message"];
       } else if (response.statusCode == 401) {
-        _errorMassage = data["message"];
+        _errorMessage = data["message"];
         return false;
       }
     } catch (e) {
@@ -195,17 +194,17 @@ class PickUpProvider extends ChangeNotifier {
       var data = jsonDecode(response.body);
       _statusCodeCreate = response.statusCode;
       if (response.statusCode == 201) {
-        _massageCreate = data["message"];
+        _messageCreate = data["message"];
         _createPickupState = AllStates.Done;
         notifyListeners();
         return true;
       } else if (response.statusCode == 422) {
-        _errorMassage = data["message"];
+        _errorMessage = data["message"];
         _singlePickupState = AllStates.Init;
         notifyListeners();
         return false;
       } else {
-        _errorMassage = data["message"];
+        _errorMessage = data["message"];
         _singlePickupState = AllStates.Init;
         notifyListeners();
         return false;

@@ -108,7 +108,8 @@ class _SingUpPageState extends State<SingUpPage> {
                     lines: 1,
                     context: context,
                     formKey: _signUpFormKey,
-                    hintInputToUser: "your_first",
+                    hintInputToUser:
+                        AppLocale.of(context).getTranslated("your_first"),
                     controller: _firstName,
                     inputType: TextInputType.name),
                 drawTitleAndHeaderTextRow(
@@ -123,7 +124,8 @@ class _SingUpPageState extends State<SingUpPage> {
                     lines: 1,
                     context: context,
                     formKey: _signUpFormKey,
-                    hintInputToUser: "your_last",
+                    hintInputToUser:
+                        AppLocale.of(context).getTranslated("your_last"),
                     controller: _lastName,
                     inputType: TextInputType.name),
                 drawTitleAndHeaderTextRow(
@@ -138,7 +140,8 @@ class _SingUpPageState extends State<SingUpPage> {
                     lines: 1,
                     context: context,
                     formKey: _signUpFormKey,
-                    hintInputToUser: AppLocale.of(context).getTranslated("your_phone"),
+                    hintInputToUser:
+                        AppLocale.of(context).getTranslated("your_phone"),
                     controller: _phoneNumber,
                     inputType: TextInputType.phone),
                 drawTitleAndHeaderTextRow(
@@ -153,7 +156,8 @@ class _SingUpPageState extends State<SingUpPage> {
                     lines: 1,
                     context: context,
                     formKey: _signUpFormKey,
-                    hintInputToUser: AppLocale.of(context).getTranslated("your_email"),
+                    hintInputToUser:
+                        AppLocale.of(context).getTranslated("your_email"),
                     controller: _email,
                     inputType: TextInputType.emailAddress),
                 drawTitleAndHeaderTextRow(
@@ -210,20 +214,21 @@ class _SingUpPageState extends State<SingUpPage> {
                   height: 20,
                 ),
                 _drawButtonDecider(
-                  text: authenticationProvider.state == AuthStates.authenticating
-                      ? CircularProgressIndicator(
-                          backgroundColor: CustomColors.primary,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                              CustomColors.thirdPrimary),
-                        )
-                      : Text(
-                          AppLocale.of(context).getTranslated("register"),
-                          style: TextStyle(
-                            color: CustomColors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                  text:
+                      authenticationProvider.state == AuthStates.authenticating
+                          ? CircularProgressIndicator(
+                              backgroundColor: CustomColors.primary,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  CustomColors.thirdPrimary),
+                            )
+                          : Text(
+                              AppLocale.of(context).getTranslated("register"),
+                              style: TextStyle(
+                                color: CustomColors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                   backGroundColor: CustomColors.secondPrimary,
                   width: MediaQuery.of(context).size.width * 0.85,
                   body: () async {
@@ -236,6 +241,11 @@ class _SingUpPageState extends State<SingUpPage> {
                         _password.text,
                         _radioValue,
                       )) {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => VerifyPhoneNumberPage()));
+                      } else {
                         _signUpKey.currentState.showSnackBar(SnackBar(
                           backgroundColor: CustomColors.primary,
                           content: Text(
@@ -246,11 +256,6 @@ class _SingUpPageState extends State<SingUpPage> {
                             ),
                           ),
                         ));
-                      } else {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => VerifyPhoneNumber()));
                       }
                     }
                   },

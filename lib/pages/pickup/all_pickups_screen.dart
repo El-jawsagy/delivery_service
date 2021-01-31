@@ -134,7 +134,7 @@ class _PickupsPageState extends State<PickupsPage> {
             );
           } else if (allPickupsProvider.responseCodeOfPickups == 401) {
             return drawBlockedShipment(
-              onTapToDo: () async {
+              onTapToDoReload: () async {
                 await Future.delayed(
                   Duration(milliseconds: 1000),
                 );

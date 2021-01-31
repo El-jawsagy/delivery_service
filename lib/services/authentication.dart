@@ -2,17 +2,22 @@ import 'dart:convert';
 
 import 'package:bosta_clone_app/model/user_model.dart';
 import 'package:bosta_clone_app/services/all_states_enum.dart';
-import 'file:///C:/Users/mahmoud.ragab/projects/flutter_apps/bosta_clone_app/lib/utilities/API/api_paths.dart';
 import 'package:bosta_clone_app/utilities/data/prefrences.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'file:///C:/Users/mahmoud.ragab/projects/flutter_apps/bosta_clone_app/lib/utilities/API/api_paths.dart';
+
 class AuthProvider extends ChangeNotifier {
   AuthStates _authState = AuthStates.unAuthenticated;
-  String _errorMassage;
+  AuthStates _verifyCodeState = AuthStates.unAuthenticated;
+  String _errorMessage;
+  String _message;
   String _token;
-  int statusCode;
+  int _statusCodeOfResendCode;
+  int _statusCodeOfVerifyCode;
+  int _statusCode;
 
   UserModel _user;
 
@@ -34,11 +39,15 @@ class AuthProvider extends ChangeNotifier {
 
   UserModel get user => _user;
 
-  String get error => _errorMassage;
+  String get error => _errorMessage;
+
+  String get message => _message;
 
   String get token => _token;
+  int get stateCode => _statusCode;
 
   AuthStates get state => _authState;
+  AuthStates get verifyCodeState => _verifyCodeState;
 
   Future<bool> getUser(token) async {
     try {
@@ -64,7 +73,7 @@ class AuthProvider extends ChangeNotifier {
 
         return true;
       } else if (response.statusCode > 500) {
-        _errorMassage = "can't reach server";
+        _errorMessage = "can't reach server";
         _authState = AuthStates.unAuthenticated;
         notifyListeners();
       } else if (response.statusCode == 301 ||
@@ -72,11 +81,11 @@ class AuthProvider extends ChangeNotifier {
           response.statusCode == 303 ||
           response.statusCode == 307 ||
           response.statusCode == 308) {
-        _errorMassage = "redirect";
+        _errorMessage = "redirect";
         _authState = AuthStates.unAuthenticated;
         notifyListeners();
       } else if (response.statusCode == 401) {
-        _errorMassage = data["message"];
+        _errorMessage = data["message"];
       }
     } catch (e) {
       throw "we have an error";
@@ -99,37 +108,21 @@ class AuthProvider extends ChangeNotifier {
           headers: {"Accept": "application/json"});
       print(response.body);
       print(response.statusCode);
+      _statusCode = response.statusCode;
       var data = jsonDecode(response.body);
+      notifyListeners();
+
       if (response.statusCode == 200) {
-        var result = data["message"];
-        if (result == "You logged in successfully" ||
-            result == "تم تسجيل الدخول بنجاح") {
-          await setToken(data["token"]);
-          print(Preference.getToken());
-          _user = UserModel.fromJson(data["user"]);
-          _authState = AuthStates.authenticated;
-          notifyListeners();
-        }
+        await setToken(data["token"]);
+        print(Preference.getToken());
+        _user = UserModel.fromJson(data["user"]);
+        _authState = AuthStates.authenticated;
+        notifyListeners();
         return true;
-      } else if (response.statusCode > 500) {
-        _errorMassage = "can't reach server";
+      } else if (response.statusCode != 200) {
+        _errorMessage = data["message"];
         _authState = AuthStates.unAuthenticated;
         notifyListeners();
-        return false;
-      } else if (response.statusCode == 301 ||
-          response.statusCode == 302 ||
-          response.statusCode == 303 ||
-          response.statusCode == 307 ||
-          response.statusCode == 308) {
-        _errorMassage = "redirect";
-        _authState = AuthStates.unAuthenticated;
-        notifyListeners();
-        return false;
-      } else if (response.statusCode == 401) {
-        _errorMassage = data["message"];
-        _authState = AuthStates.unAuthenticated;
-        notifyListeners();
-        return false;
       }
     } catch (e) {
       throw "we have an error";
@@ -180,50 +173,31 @@ class AuthProvider extends ChangeNotifier {
 
       var data = jsonDecode(response.body);
 
-      if (response.statusCode == 200) {
-        var result = data["message"];
-
-        if (result == "You logged in successfully" ||
-            result == "تم تسجيل الدخول بنجاح") {
-          setToken(data["token"]);
-          _user = UserModel.fromJson(data);
-        }
+      if (response.statusCode == 201) {
+        setToken(data["token"]);
+        _user = UserModel.fromJson(data["user"]);
         _authState = AuthStates.authenticated;
         notifyListeners();
         return true;
-      } else if (response.statusCode > 500) {
-        _errorMassage = "can't reach server";
-        _authState = AuthStates.unAuthenticated;
-        notifyListeners();
-        return false;
-      } else if (response.statusCode == 301 ||
-          response.statusCode == 302 ||
-          response.statusCode == 303 ||
-          response.statusCode == 307 ||
-          response.statusCode == 308) {
-        _errorMassage = "redirect";
-        _authState = AuthStates.unAuthenticated;
-        notifyListeners();
-        return false;
-      } else if (response.statusCode == 401) {
-        _errorMassage = data["message"];
-        _authState = AuthStates.unAuthenticated;
-        notifyListeners();
-        return false;
       } else if (response.statusCode == 422) {
         if (data.containsKey("first_name")) {
-          _errorMassage = data["first_name"][0];
+          _errorMessage = data["first_name"][0];
         } else if (data.containsKey("last_name")) {
-          _errorMassage = data["last_name"][0];
+          _errorMessage = data["last_name"][0];
         } else if (data.containsKey("email")) {
-          _errorMassage = data["email"][0];
+          _errorMessage = data["email"][0];
         } else if (data.containsKey("subscribtion_type")) {
-          _errorMassage = data["subscribtion_type"][0];
+          _errorMessage = data["subscribtion_type"][0];
         } else if (data.containsKey("phone_number")) {
-          _errorMassage = data["phone_number"][0];
+          _errorMessage = data["phone_number"][0];
         } else if (data.containsKey("password")) {
-          _errorMassage = data["password"][0];
+          _errorMessage = data["password"][0];
         }
+        _authState = AuthStates.unAuthenticated;
+        notifyListeners();
+        return false;
+      } else if (response.statusCode != 201) {
+        _errorMessage = data["message"];
         _authState = AuthStates.unAuthenticated;
         notifyListeners();
         return false;
@@ -232,9 +206,81 @@ class AuthProvider extends ChangeNotifier {
       throw "we have an error";
     }
     _authState = AuthStates.unAuthenticated;
-
     notifyListeners();
+    return false;
+  }
 
+  Future<bool> verifyPhoneNumber(numberFromMessage) async {
+    try {
+      String url = APIPaths.verifyPhoneNumber +
+          "?locale=${await Preference.getLanguage()}";
+      _verifyCodeState = AuthStates.authenticating;
+      notifyListeners();
+      print({
+        "verification_code": numberFromMessage,
+      });
+
+      var response = await http.post(url, body: {
+        "verification_code": numberFromMessage,
+      }, headers: {
+        "Authorization": "Bearer " + await Preference.getToken(),
+        "Accept": "application/json"
+      });
+      print(response.body);
+      _statusCodeOfVerifyCode= response.statusCode;
+
+      print(response.statusCode);
+      var data = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        _verifyCodeState = AuthStates.authenticated;
+        notifyListeners();
+        return true;
+      } else if (response.statusCode != 200) {
+        _errorMessage = data["message"];
+        _verifyCodeState = AuthStates.unAuthenticated;
+        notifyListeners();
+      }
+    } catch (e) {
+      throw "we have an error";
+    }
+    _verifyCodeState = AuthStates.unAuthenticated;
+    notifyListeners();
+    return false;
+  }
+
+  Future<bool> resendVerifyCode() async {
+    try {
+      String url =
+          APIPaths.resendCode + "?locale=${await Preference.getLanguage()}";
+      _authState = AuthStates.authenticating;
+      notifyListeners();
+
+      var response = await http.post(
+        url,
+        headers: {
+          "Authorization": "Bearer " + await Preference.getToken(),
+          "Accept": "application/json"
+        },
+      );
+      print(response.body);
+      _statusCodeOfResendCode = response.statusCode;
+      print(response.statusCode);
+      var data = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        _message = data["message"];
+        _authState = AuthStates.authenticated;
+        notifyListeners();
+        return true;
+      } else if (response.statusCode != 200) {
+        _errorMessage = data["message"];
+        _authState = AuthStates.unAuthenticated;
+        notifyListeners();
+      }
+    } catch (e) {
+      throw "we have an error";
+    }
+    _authState = AuthStates.unAuthenticated;
+    notifyListeners();
     return false;
   }
 

@@ -242,7 +242,9 @@ class _CreatePickupState extends State<CreatePickup> {
                             ),
                       backGroundColor: CustomColors.primary,
                       width: MediaQuery.of(context).size.width * 0.85,
-                      onPress: () async {
+                  height: 40.0,
+
+                  onPress: () async {
                         if (_createPickupFormKey.currentState.validate()) {
                           if (!await createPickUpProvider.createSinglePickup(
                             shipmentId: _shipmentId.text,
@@ -281,7 +283,7 @@ class _CreatePickupState extends State<CreatePickup> {
                               duration: Duration(seconds: 1, milliseconds: 500),
                               backgroundColor: CustomColors.primary,
                               content: Text(
-                                createPickUpProvider.massageCreate,
+                                createPickUpProvider.messageCreate,
                                 style: TextStyle(
                                   color: CustomColors.white,
                                   fontWeight: FontWeight.bold,
@@ -306,7 +308,9 @@ class _CreatePickupState extends State<CreatePickup> {
                       ),
                       backGroundColor: CustomColors.grayBackground,
                       width: MediaQuery.of(context).size.width * 0.85,
-                      onPress: () {
+                  height: 40.0,
+
+                  onPress: () {
                         _createPickUpScaffoldKey.currentState
                             .showSnackBar(SnackBar(
                           duration: Duration(seconds: 1, milliseconds: 500),

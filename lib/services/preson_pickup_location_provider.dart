@@ -11,7 +11,7 @@ class PersonPickUpLocationProvider extends ChangeNotifier {
   AllStates _personPickupsLocationState = AllStates.Init;
 
   // AllStates _createPersonPickupState = AllStates.Init;
-  String _errorMassage, _massage;
+  String _errorMessage, _message;
   int statusCodeGet, statusCodeCreate;
   List<PersonModel> _personPickupsLocation = [];
   PersonModel _selectedPersonPickupLocation;
@@ -26,9 +26,9 @@ class PersonPickUpLocationProvider extends ChangeNotifier {
 
   PersonModel get selectedPersonInLocation => _selectedPersonPickupLocation;
 
-  String get error => _errorMassage;
+  String get error => _errorMessage;
 
-  String get massage => _massage;
+  String get message => _message;
 
   AllStates get stateOfPersonPickupLocation => _personPickupsLocationState;
 
@@ -82,8 +82,8 @@ class PersonPickUpLocationProvider extends ChangeNotifier {
       } else if (response.statusCode != 200) {
         print(getResponse["message"]);
 
-        _errorMassage = getResponse["message"];
-        print(_errorMassage);
+        _errorMessage = getResponse["message"];
+        print(_errorMessage);
         _personPickupsLocationState = AllStates.Init;
         notifyListeners();
         return false;

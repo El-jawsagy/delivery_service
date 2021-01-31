@@ -124,12 +124,13 @@ Widget giveWidthSpace({double width}) {
 Widget drawButton({
   Color backGroundColor,
   double width,
+  height,
   Widget text,
   Function onPress,
 }) {
   return FlatButton(
     color: backGroundColor,
-    height: 40,
+    height: height,
     minWidth: width,
     onPressed: onPress,
     child: text,
@@ -207,7 +208,8 @@ Widget drawSingleRadio({
   );
 }
 
-Widget drawCheckBox({BuildContext context, Function onPressed, checkboxValue,checkboxText}) {
+Widget drawCheckBox(
+    {BuildContext context, Function onPressed, checkboxValue, checkboxText}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Row(
@@ -238,7 +240,8 @@ Widget drawCheckBox({BuildContext context, Function onPressed, checkboxValue,che
         Container(
           padding: EdgeInsets.all(8),
           width: MediaQuery.of(context).size.width * 0.8,
-          child: Text( checkboxText,
+          child: Text(
+            checkboxText,
             style: TextStyle(
               color: CustomColors.gray,
               fontSize: 12,

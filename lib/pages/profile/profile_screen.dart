@@ -1,13 +1,16 @@
 import 'package:bosta_clone_app/model/user_model.dart';
+import 'package:bosta_clone_app/pages/auth/verify_phone_number.dart';
+import 'package:bosta_clone_app/pages/samilier_widget/screen_handle_widget.dart';
 import 'package:bosta_clone_app/services/authentication.dart';
+import 'package:bosta_clone_app/utilities/data/prefrences.dart';
 import 'package:bosta_clone_app/utilities/lang/applocate.dart';
+import 'package:bosta_clone_app/utilities/theme/custom_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
-import '../../utilities/data/prefrences.dart';
-import '../../utilities/theme/custom_colors.dart';
+
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -41,7 +44,7 @@ class _ProfileScreenState extends State<ProfilePage> {
             backgroundColor: CustomColors.trans,
             elevation: 0,
           ),
-          body: Center(
+          body:AuthenticationProvider.user!=null? Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -84,7 +87,7 @@ class _ProfileScreenState extends State<ProfilePage> {
                 _drawChangeLangButton(),
               ],
             ),
-          ),
+          ):drawLoadingIndicator(context),
         ),
       ],
     );
@@ -114,7 +117,10 @@ class _ProfileScreenState extends State<ProfilePage> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50),
         ),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => VerifyPhoneNumberPage(),),);
+        },
         child: Center(
           child: Text(
             AppLocale.of(context).getTranslated("edit_profile"),

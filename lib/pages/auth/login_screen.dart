@@ -91,24 +91,27 @@ class _LoginPageState extends State<LoginPage> {
                 height: 20,
               ),
               drawButton(
-                  text: authenticationProvider.state == AuthStates.authenticating
-                      ? CircularProgressIndicator(
-                          backgroundColor: CustomColors.primary,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                              CustomColors.thirdPrimary),
-                        )
-                      : Text(
-                          AppLocale.of(context).getTranslated("login"),
-                          style: TextStyle(
-                            color: CustomColors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                  text:
+                      authenticationProvider.state == AuthStates.authenticating
+                          ? CircularProgressIndicator(
+                              backgroundColor: CustomColors.primary,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  CustomColors.thirdPrimary),
+                            )
+                          : Text(
+                              AppLocale.of(context).getTranslated("login"),
+                              style: TextStyle(
+                                color: CustomColors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                   backGroundColor: CustomColors.primary,
                   width: MediaQuery.of(context).size.width * 0.85,
+                  height: 40.0,
                   onPress: () async {
-                    if (!await authenticationProvider.singIn(_email.text, _password.text)) {
+                    if (!await authenticationProvider.singIn(
+                        _email.text, _password.text)) {
                       loginKey.currentState.showSnackBar(SnackBar(
                         backgroundColor: CustomColors.primary,
                         content: Text(
@@ -140,6 +143,8 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   backGroundColor: CustomColors.secondPrimary,
                   width: MediaQuery.of(context).size.width * 0.85,
+                  height: 40.0,
+
                   onPress: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => SingUpPage()));
